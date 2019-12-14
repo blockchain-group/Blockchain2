@@ -46,6 +46,22 @@ public:
     void setNonce(unsigned int _nonce) {
         nonce = _nonce;
     }
+    
+    unsigned int getNonce() const {
+        return nonce;
+    }
+    
+    std::string getPrevHash() const {
+        return prevHash;
+    }
+    
+    unsigned int getTimestamp() const {
+        return timestamp;
+    }
+    
+    unsigned int getDifficultyTarget() const {
+        return difficultyTarget;
+    }
 private:
     unsigned int version;
     std::string prevHash;

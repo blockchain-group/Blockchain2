@@ -56,6 +56,20 @@ void removeMinedTransactions(std::vector<Transaction> &allTransactions, int tran
     allTransactions.erase(allTransactions.begin(), allTransactions.begin() + std::min(transactionsPerBlock, (int)allTransactions.size()));
 }
 
+void verifyAndPushBlock(std::stack<Block> &blockchain, Block block, std::vector<Transaction> &blockTransactions, std::vector<Transaction> &transactions, unsigned int transanctionsPerBlock) {
+    Block verification = Block(block.getPrevHash(), block.getTimestamp(), block.getDifficultyTarget(), blockTransactions);
+    verification.setNonce(block.getNonce());
+    if (verification.getHash() == block.getHash()) {
+        blockchain.push(block);
+    
+        removeMinedTransactions(transactions, TRANSACTIONS_PER_BLOCK);
+        std::cout << "Block " << blockchain.size() << ": " << block.getHash() << std::endl;
+        std::cout << "Transactions left in pool: " << transactions.size() << std::endl;
+    } else {
+        std::cout << "Fake block detected!" << std::endl;
+    }
+}
+
 int main(int argc, const char * argv[]) {
     UserBuilder userBuilder(1000);
     std::vector<User> users = userBuilder.getUsers();
@@ -76,11 +90,7 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < 10000; i += TRANSACTIONS_PER_BLOCK) {
         std::vector<Transaction> blockTransactions = getRandomVerifiedTransactions(transactions, TRANSACTIONS_PER_BLOCK, users);
         Block block1 = miner1.mineBlock(blockchain.top().getHash(), difficultyTarget, blockTransactions);
-        blockchain.push(block1);
-        
-        removeMinedTransactions(transactions, TRANSACTIONS_PER_BLOCK);
-        std::cout << "Block " << i / TRANSACTIONS_PER_BLOCK << ": " << block1.getHash() << std::endl;
-        std::cout << "Transactions left in pool: " << transactions.size() << std::endl;
+        verifyAndPushBlock(blockchain, block1, blockTransactions, transactions, TRANSACTIONS_PER_BLOCK);
     }
     
     return 0;
