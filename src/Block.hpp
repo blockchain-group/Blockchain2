@@ -27,7 +27,8 @@ public:
         }
         
         MerkleTree merkleTree(transactionHashes, Hash::getHash);
-        merkleHash = merkleTree.getRoot();
+        // merkleHash = merkleTree.getRoot(); // My implementation
+        merkleHash = merkleTree.getMerkleHashFromLibBitcoin();
     }
     
     void addTransaction(Transaction &transaction) {
