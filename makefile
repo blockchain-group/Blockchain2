@@ -8,14 +8,16 @@ SRCS := $(shell find $(SRC_DIRS) -name '*.cpp' -or -name '*.c')
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 DEPS := $(OBJS:.o=.d)
 
-INC_DIRS := $(shell find $(SRC_DIRS) -type d)
+INC_DIRS := $(shell find $(SRC_DIRS) -type d) ../../libbitcoin/include
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -std=c++17 -O3
+LIB_DIRS := -L ../../libbitcoin/lib -lbitcoin -lboost_program_options -lboost_atomic -lboost_regex -lboost_system
+
+CPPFLAGS ?= $(INC_FLAGS) $(LIB_DIRS) -MMD -MP -std=c++14 -O3
 
 $(TARGET_DIR)/$(TARGET_EXEC): $(OBJS)
 	$(MKDIR_P) $(dir $@)
-	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
+	$(CXX) $(OBJS) $(LIB_DIRS) -o $@ $(LDFLAGS)
 
 # c source
 $(BUILD_DIR)/%.c.o: %.c
