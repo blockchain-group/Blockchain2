@@ -23,6 +23,7 @@
 #include "Miner.hpp"
 
 #define TRANSACTIONS_PER_BLOCK 100
+#define DEFAULT_ATTEMPTS_PER_MINER 100
 
 std::string testHash(std::string input) {
     return "Hash(" + input + ")";
@@ -84,7 +85,7 @@ int main(int argc, const char * argv[]) {
     blockchain.push(genesisBlock);
     
     unsigned int difficultyTarget = 4;
-    unsigned int attemptsPerMiner = 100;
+    unsigned int attemptsPerMiner = 0;
     
     std::vector<Miner> miners;
     for (int i = 0; i < 5; i++) {
@@ -92,6 +93,8 @@ int main(int argc, const char * argv[]) {
     }
     
     for (int i = 0; i < 10000; i += TRANSACTIONS_PER_BLOCK) {
+        attemptsPerMiner = DEFAULT_ATTEMPTS_PER_MINER;
+        
         for (auto &miner : miners) {
             std::vector<Transaction> blockTransactions = getRandomVerifiedTransactions(transactions, TRANSACTIONS_PER_BLOCK, users);
             miner.setTransactions(blockTransactions);
@@ -111,7 +114,7 @@ int main(int argc, const char * argv[]) {
                 }
             }
             
-            attemptsPerMiner += 2;
+            attemptsPerMiner *= 2;
         }
     }
     
