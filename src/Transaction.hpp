@@ -15,12 +15,28 @@
 
 class Transaction {
 public:
-    Transaction(unsigned int _senderId, unsigned int _recipientId, double _amount) : senderId(_senderId), recipientId(_recipientId), amount(_amount) {
+    Transaction(unsigned int _senderId, unsigned int _recipientId, double _amount, unsigned int _timestamp) : senderId(_senderId), recipientId(_recipientId), amount(_amount), timestamp(_timestamp) {
         id = getHash();
     }
     
     std::string getId() const {
         return id;
+    }
+    
+    unsigned int getSenderId() const {
+        return senderId;
+    }
+    
+    unsigned int getRecipientId() const {
+        return recipientId;
+    }
+    
+    unsigned int getTimestamp() const {
+        return timestamp;
+    }
+    
+    double getAmount() const {
+        return amount;
     }
     
     std::string getHash() {

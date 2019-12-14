@@ -19,6 +19,10 @@ public:
     unsigned int getId() const {
         return id;
     }
+    
+    double getBalance() const {
+        return balance;
+    }
 private:
     unsigned int id;
     std::string name;

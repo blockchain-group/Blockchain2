@@ -11,6 +11,7 @@
 
 #include <vector>
 #include <string>
+#include <climits>
 #include "Transaction.hpp"
 #include "User.hpp"
 #include "Random.hpp"
@@ -33,8 +34,9 @@ private:
     Transaction newRandomTransaction(std::vector<User> &users) {
         unsigned int recipientId = getRandomRecipient(users);
         unsigned int senderId = getRandomSender(users, recipientId);
+        unsigned int timestamp = Random::randomUnsignedInt(0, INT_MAX);
         double amount = Random::randomDouble(0.1, 100);
-        return Transaction(recipientId, senderId, amount);
+        return Transaction(recipientId, senderId, amount, timestamp);
     }
     
     unsigned int getRandomRecipient(std::vector<User> &users) {
